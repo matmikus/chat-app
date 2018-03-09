@@ -81,7 +81,7 @@ div#app {
   height: 100%;
   display: flex;
   justify-content: space-between;
-  font-family: tahoma;
+  font-family: tahoma, verdana, ubuntu;
 }
 
 div#container-left {
@@ -145,7 +145,7 @@ div#message-writing {
 textarea#message-text {
   width: 100%;
   height: 6rem;
-  font-family: tahoma;
+  font-family: tahoma, verdana, ubuntu;
 }
 
 button#send {
