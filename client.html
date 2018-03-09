@@ -12,63 +12,63 @@
     <div id="container-left" class="container">
       <div id="chat-box" class="box">
         <div class="chat-message-own">
-          <div id="avatar">
+          <div class="avatar">
             <img src="avatars/1.png">
             <span class="nickname">Mikuśxyz69</span>
           </div>
           <div class="chat-text">
-            <span class="arrow-own"></span>
+            <span class="arrow-left"></span>
             <span class="chat-text">lorem ipsum</span>
           </div>
         </div>
         <div class="chat-message">
-          <div id="avatar">
+          <div class="avatar">
             <img src="avatars/2.png">
             <span class="nickname">landryna</span>
           </div>
           <div class="chat-text">
             <span class="chat-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nibh augue, suscipit a, scelerisque sed, lacinia in, mi. Cras vel lorem. Etiam pellenles velit quis augue. Cras suscipit, urna at aliquam rhoncus, urna quam viverra nisi, in interdum massa nibh nec erat.</span>
-            <span class="arrow"></span>
+            <span class="arrow-right"></span>
           </div>
         </div>
         <div class="chat-message">
-          <div id="avatar">
+          <div class="avatar">
             <img src="avatars/3.png">
             <span class="nickname">Pikachu666</span>
           </div>
           <div class="chat-text">
             <span class="chat-text">lorem ipsum</span>
-            <span class="arrow"></span>
+            <span class="arrow-right"></span>
           </div>
         </div>
         <div class="chat-message-own">
-          <div id="avatar">
+          <div class="avatar">
             <img src="avatars/1.png">
             <span class="nickname">Mikuśxyz69</span>
           </div>
           <div class="chat-text">
-            <span class="arrow-own"></span>
+            <span class="arrow-left"></span>
             <span class="chat-text">lorem ipsum Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nibh augue</span>
           </div>
         </div>
         <div class="chat-message-own">
-          <div id="avatar">
+          <div class="avatar">
             <img src="avatars/1.png">
             <span class="nickname">Mikuśxyz69</span>
           </div>
           <div class="chat-text">
-            <span class="arrow-own"></span>
+            <span class="arrow-left"></span>
             <span class="chat-text">lorem ipsum Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nibh augue</span>
           </div>
         </div>
       </div>
       <div id="message-box" class="box">
-        <div id="avatar">
-          <img src="avatars/1.png">
+        <div class="avatar">
+          <img src="avatars/1b.png">
           <span class="nickname">Mikuśxyz69</span>
         </div>
-        <div id="message">
-          <textarea></textarea><br>
+        <div id="message-writing">
+          <textarea id="message-text"></textarea><br>
           <button id="send" type="button">SEND</button>
         </div>
       </div>
@@ -80,8 +80,8 @@
           <input type="radio" name="protocol" value="ajax" checked> AJAX&nbsp;&nbsp;&nbsp;
           <input type="radio" name="protocol" value="websocket"> WEBSOCKET
         </form>
-        <button type="button">CLEAR LOG</button>
-        <button type="button">SHOW STATS</button>
+        <button id="clear-log" type="button" class="stats">CLEAR LOG</button>
+        <button id="show-stats" type="button" class="stats">SHOW STATS</button>
       </div>
     </div>
   </div>

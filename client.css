@@ -1,7 +1,82 @@
 body {
   margin: 0;
 }
-#app {
+
+div.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #e6f2ff;
+}
+
+div.box {
+  padding: 1rem;
+}
+
+div.avatar {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+span.nickname {
+  text-align: center;
+  font-weight: bold;
+}
+
+div.chat-message-own {
+  max-width: 700px;
+  display: flex;
+  justify-content: center;
+  margin: 0.5rem auto;
+}
+
+div.chat-message {
+  max-width: 700px;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: center;
+  margin: 0.5rem auto;
+}
+
+div.chat-text {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+span.chat-text {
+  display: block;
+  padding: 1.5rem;
+  color: white;
+  background-color: navy;
+  border-radius: 0.6rem;
+}
+
+span.arrow-left {
+  border: 17px solid transparent;
+  border-right-color: navy;
+  border-left: 0;
+}
+
+span.arrow-right {
+  border: 17px solid transparent;
+  border-left-color: navy;
+  border-right: 0;
+}
+
+button.stats {
+  background-color: black;
+  color: white;
+  padding: .5rem;
+  width: 200px;
+}
+
+
+div#app {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -9,30 +84,24 @@ body {
   justify-content: space-between;
   font-family: tahoma;
 }
-.container {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  background-color: #e6f2ff;
-}
-#container-left {
+
+div#container-left {
   width: 70%;
 }
-#container-right {
+
+div#container-right {
   width: 30%;
 }
-.box {
-  padding: 1rem;
-}
-#chat-box {
+
+div#chat-box {
   height: 70%;
   border-style: solid;
   border-color: gray;
   border-width: 0 1px 1px 0;
   overflow: auto;
 }
-#message-box {
+
+div#message-box {
   height: 30%;
   border-style: solid;
   border-color: gray;
@@ -41,7 +110,8 @@ body {
   justify-content: center;
   background-color: #bdccde;
 }
-#log-box {
+
+div#log-box {
   height: 70%;
   border-style: solid;
   border-color: gray;
@@ -50,7 +120,8 @@ body {
   color: #a7a7a7;
   overflow: auto;
 }
-#settings-box {
+
+div#settings-box {
   height: 30%;
   border-style: solid;
   border-color: gray;
@@ -61,61 +132,26 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+  align-items: center;
 }
-#message {
+
+div#message-writing {
   width: 400px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-}
-#avatar {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-textarea {
-  width: 100%;
-  height: 6rem;
-}
-#send {
-
-}
-span.nickname {
-  text-align: center;
-}
-.chat-message-own {
-  max-width: 700px;
-  display: flex;
-  justify-content: center;
-  margin: 0 auto;
-}
-.chat-message {
-  max-width: 700px;
-  display: flex;
-  flex-direction: row-reverse;
-  justify-content: center;
-  margin: 0 auto;
-}
-.chat-text {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
   align-items: center;
 }
-span.chat-text {
-  display: block;
-  padding: 1rem;
-  color: white;
+
+textarea#message-text {
+  width: 100%;
+  height: 6rem;
+  font-family: tahoma;
+}
+
+button#send {
   background-color: navy;
-	border-radius: .5em;
-}
-span.arrow-own {
-	border: 17px solid transparent;
-	border-right-color: navy;
-	border-left: 0;
-}
-span.arrow {
-	border: 17px solid transparent;
-	border-left-color: navy;
-	border-right: 0;
+  color: white;
+  padding: .5rem;
+  width: 100px;
 }
