@@ -52,19 +52,19 @@ span.chat-text {
   display: block;
   padding: 1.5rem;
   color: white;
-  background-color: navy;
+  background-color: #0084ff;
   border-radius: 0.6rem;
 }
 
 span.arrow-left {
   border: 17px solid transparent;
-  border-right-color: navy;
+  border-right-color: #0084ff;
   border-left: 0;
 }
 
 span.arrow-right {
   border: 17px solid transparent;
-  border-left-color: navy;
+  border-left-color: #0084ff;
   border-right: 0;
 }
 
@@ -73,6 +73,71 @@ button.stats {
   color: white;
   padding: .5rem;
   width: 200px;
+}
+
+div.modal {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.9);
+  font-family: tahoma, verdana, ubuntu;
+}
+
+div.modal-content {
+  background-color: #ffffff;
+}
+
+div.stats-modal-heading {
+  display: flex;
+  justify-content: space-between;
+  font-size: 200%;
+  font-weight: bold;
+  margin: 1rem;
+}
+
+div.login-modal-heading {
+  text-align: center;
+  font-size: 200%;
+  font-weight: bold;
+  margin: 1rem;
+}
+
+div.modal-form {
+  text-align: center;
+}
+
+div.modal-form > * {
+  margin: 0 1rem 1rem 1rem;
+}
+
+div.modal-input {
+  display: flex;
+  justify-content: space-between;
+}
+
+div.modal-input > input {
+  width: 50%;
+}
+
+button.blue {
+  background-color: #0084ff;
+  color: white;
+  padding: .5rem;
+  width: 100px;
+}
+
+img.form-avatar {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #ffffff;
 }
 
 div#app {
@@ -148,11 +213,8 @@ textarea#message-text {
   font-family: tahoma, verdana, ubuntu;
 }
 
-button#send {
-  background-color: navy;
-  color: white;
-  padding: .5rem;
-  width: 100px;
+div#modal-stats {
+  margin: 1rem;
 }
 
 input[type=radio]:nth-child(1) {
