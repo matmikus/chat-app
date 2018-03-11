@@ -66,12 +66,47 @@ enterButton.onclick = function() {
     document.getElementById('user-nickname').innerHTML = document.getElementById('nickname-input').value;
     document.getElementById('user-avatar').style.display = "block";
     loginModal.style.display = 'none';
+    connectAJAX();
   }
+}
+
+/*
+  Adding log
+*/
+
+function addLog(text) {
+  var d = new Date();
+  var hours = d.getHours();
+  var minutes = d.getMinutes();
+  var seconds = d.getSeconds();
+  if(minutes < 10) minutes = '0' + minutes;
+  if(seconds < 10) seconds = '0' + seconds;
+  var log = document.createTextNode(hours + ':' + minutes + ':' + seconds + ' ' + text);
+  document.getElementById('log-box').appendChild(log);
 }
 
 /*
   Connection with server
 */
+
+function connectAJAX() {
+  xmlhttp = new XMLHttpRequest();
+  xmlhttp.open("POST", "http://localhost:1234/connect");
+  var message = Date.now();
+  xmlhttp.send(message);
+  xmlhttp.onreadystatechange = function() {
+    if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
+      var time = Date.now();
+    var msg = xmlhttp.responseText;
+    if (!isNaN(time - msg)) {
+      addLog('Connected with server by AJAX in ' + (time - msg) + 'ms');
+    }
+  }
+}
+
+function connectWS() {
+
+}
 
 /*
   Sending message
