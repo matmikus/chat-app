@@ -79,12 +79,13 @@ enterButton.onclick = function() {
 
 var sendButton = document.getElementById('send');
 sendButton.onclick = function() {
-  var message = document.createElement('div');
-  message.className = 'chat-message-own';
-   var messageCode = '<div class="avatar"><img src="' + document.getElementById('user-avatar').src + '" class="chat-avatar"><span class="nickname">' + document.getElementById('user-nickname').textContent + '</span></div><div class="chat-text"><span class="arrow-left"></span><span class="chat-text">' + document.getElementById('message-text').value + '</span></div>';
-   message.innerHTML = messageCode;
-  document.getElementById('message-text').value = "";
-  document.getElementById('chat-box').appendChild(message);
-
-  scrollToBottom('chat-box');
+  if (document.getElementById('message-text').value != "") {
+    var message = document.createElement('div');
+    message.className = 'chat-message-own';
+    var messageCode = '<div class="avatar"><img src="' + document.getElementById('user-avatar').src + '" class="chat-avatar"><span class="nickname">' + document.getElementById('user-nickname').textContent + '</span></div><div class="chat-text"><span class="arrow-left"></span><span class="chat-text">' + document.getElementById('message-text').value + '</span></div>';
+    message.innerHTML = messageCode;
+    document.getElementById('message-text').value = "";
+    document.getElementById('chat-box').appendChild(message);
+    scrollToBottom('chat-box');
+  }
 }
