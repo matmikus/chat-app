@@ -144,6 +144,10 @@ img.form-avatar {
   border: 3px solid #ffffff;
 }
 
+img.chat-avatar {
+  width: 64px;
+  height: 64px;
+}
 span.modal-close {
   cursor: pointer;
 }
