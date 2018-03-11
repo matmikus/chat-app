@@ -2,6 +2,10 @@ body {
   margin: 0;
 }
 
+button {
+  cursor: pointer;
+}
+
 div.container {
   height: 100%;
   display: flex;
@@ -140,6 +144,10 @@ img.form-avatar {
   border: 3px solid #ffffff;
 }
 
+span.modal-close {
+  cursor: pointer;
+}
+
 div#app {
   position: absolute;
   width: 100%;
@@ -215,6 +223,11 @@ textarea#message-text {
 
 div#modal-stats {
   margin: 1rem;
+}
+
+div#warning {
+  color: red;
+  display: none;
 }
 
 input[type=radio]:nth-child(1) {

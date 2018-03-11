@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="stylesheet" href="client.css">
-  <title>CHATAPP</title>
+  <title>CHAT-APP</title>
 </head>
 
 <body>
@@ -64,17 +64,17 @@
       </div>
       <div id="message-box" class="box">
         <div class="avatar">
-          <img src="avatars/1b.png">
-          <span class="nickname">Mikuśxyz69</span>
+          <img id="user-avatar">
+          <span id="user-nickname" class="nickname"></span>
         </div>
         <div id="message-writing">
-          <textarea id="message-text"></textarea><br>
+          <textarea id="message-text" maxlength="200"></textarea><br>
           <button id="send" class="blue" type="button">SEND</button>
         </div>
       </div>
     </div>
     <div id="container-right" class="container">
-      <div id="log-box" class="box">logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br>logi<br></div>
+      <div id="log-box" class="box"></div>
       <div id="settings-box" class="box">
         <form>
           <input type="radio" name="protocol" value="ajax" checked>AJAX
@@ -93,30 +93,31 @@
         <div>Welcome to chat application</div>
         <div class="modal-input">
           <span>Your nickname</span>
-          <input type="text" name="nickname">
+          <input id="nickname-input" type="text" name="nickname" maxlength="10">
         </div>
         <div class="modal-input">
           <span>Your avatar</span>
           <span>
-            <img src="avatars/1.png" class="form-avatar">
-            <img src="avatars/2.png" class="form-avatar">
-            <img src="avatars/3.png" class="form-avatar">
+            <img src="avatars/1b.png" class="form-avatar">
+            <img src="avatars/2b.png" class="form-avatar">
+            <img src="avatars/3b.png" class="form-avatar">
             <br>
-            <img src="avatars/4.png" class="form-avatar">
-            <img src="avatars/5.png" class="form-avatar">
-            <img src="avatars/6.png" class="form-avatar">
+            <img src="avatars/4b.png" class="form-avatar">
+            <img src="avatars/5b.png" class="form-avatar">
+            <img src="avatars/6b.png" class="form-avatar">
             <br>
-            <img src="avatars/7.png" class="form-avatar">
-            <img src="avatars/8.png" class="form-avatar">
-            <img src="avatars/9.png" class="form-avatar">
+            <img src="avatars/7b.png" class="form-avatar">
+            <img src="avatars/8b.png" class="form-avatar">
+            <img src="avatars/9b.png" class="form-avatar">
             <br>
-            <img src="avatars/10.png" class="form-avatar">
-            <img src="avatars/11.png" class="form-avatar">
-            <img src="avatars/12.png" class="form-avatar">
+            <img src="avatars/10b.png" class="form-avatar">
+            <img src="avatars/11b.png" class="form-avatar">
+            <img src="avatars/12b.png" class="form-avatar">
             <br>
           </span>
         </div>
         <button id="enter" class="blue" type="button">ENTER</button>
+        <div id="warning">Nickname and avatar are required</div>
       </div>
     </div>
   </div>
