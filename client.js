@@ -71,6 +71,20 @@ enterButton.onclick = function() {
 }
 
 /*
+  Changing connection type
+*/
+
+var radioAX = document.getElementById('radioAX');
+radioAX.onchange = function() {
+  connectAJAX();
+}
+
+var radioWS = document.getElementById('radioWS');
+radioWS.onchange = function() {
+  connectWS();
+}
+
+/*
   Adding log
 */
 
@@ -79,10 +93,13 @@ function addLog(text) {
   var hours = d.getHours();
   var minutes = d.getMinutes();
   var seconds = d.getSeconds();
-  if(minutes < 10) minutes = '0' + minutes;
-  if(seconds < 10) seconds = '0' + seconds;
+  if (minutes < 10) minutes = '0' + minutes;
+  if (seconds < 10) seconds = '0' + seconds;
   var log = document.createTextNode(hours + ':' + minutes + ':' + seconds + ' ' + text);
   document.getElementById('log-box').appendChild(log);
+  var br = document.createElement('br');
+  document.getElementById('log-box').appendChild(br);
+  scrollToBottom('log-box');
 }
 
 /*
@@ -90,22 +107,25 @@ function addLog(text) {
 */
 
 function connectAJAX() {
+  var startTime = Date.now();
   xmlhttp = new XMLHttpRequest();
   xmlhttp.open("POST", "http://localhost:1234/connect");
-  var message = Date.now();
-  xmlhttp.send(message);
+  xmlhttp.send(0);
   xmlhttp.onreadystatechange = function() {
-    if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
-      var time = Date.now();
-    var msg = xmlhttp.responseText;
-    if (!isNaN(time - msg)) {
-      addLog('Connected with server by AJAX in ' + (time - msg) + 'ms');
+    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) var time = Date.now();
+    if (!isNaN(time - startTime)) {
+      addLog('Connected with server by AJAX in ' + (time - startTime) + 'ms');
     }
   }
 }
 
 function connectWS() {
+  var start = Date.now();
+  var ws = new WebSocket('ws://localhost:1234', 'echo-protocol');
 
+  ws.onopen = function() {
+    addLog('Connected with server by WS in ' + (Date.now() - start) + 'ms');
+  };
 }
 
 /*
