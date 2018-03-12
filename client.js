@@ -110,7 +110,7 @@ function addLog(text) {
 
 function connectAJAX() {
     var startTime = Date.now();
-    xmlhttp = new XMLHttpRequest();
+    var xmlhttp = new XMLHttpRequest();
     xmlhttp.open("GET", "http://localhost:1234/check-connection");
     xmlhttp.send(null);
     xmlhttp.onreadystatechange = function() {
@@ -122,17 +122,27 @@ function connectAJAX() {
     }
 }
 
+var xmlhttpLongPoll;
 function receiveMessagesAJAX() {
-    // xmlhttp = new XMLHttpRequest();
-    // xmlhttp.open("GET", "http://localhost:1234/get-message");
-    // xmlhttp.send(null);
-    // console.log('zaczynam czekac na nowa wiadomosc');
-    // xmlhttp.onreadystatechange = function() {
-    //     if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-    //         console.log('nowa wiadomosc z czatu!!')
-    //         receiveMessagesAJAX();
-    //     }
-    // }
+    var longPoll = function(){
+        xmlhttpLongPoll = new XMLHttpRequest();
+        xmlhttpLongPoll.open("GET", "http://localhost:1234/get-message");
+        xmlhttpLongPoll.send(null);
+        xmlhttpLongPoll.timeout = 10000;
+        console.log('zaczynam czekac na nowa wiadomosc');
+        xmlhttpLongPoll.onreadystatechange = function() {
+            if (xmlhttpLongPoll.readyState == 4 && xmlhttpLongPoll.status == 200) {
+                console.log('nowa wiadomosc z czatu!!')
+                var msg = xmlhttpLongPoll.responseText;
+                printMessage(JSON.parse(msg));
+                longPoll();
+            }
+        }
+        xmlhttpLongPoll.ontimeout = function() {
+            longPoll();
+        }
+    }
+    longPoll();
 }
 
 var ws;
@@ -142,14 +152,11 @@ function connectWS() {
     ws = new WebSocket('ws://localhost:1234', 'echo-protocol');
     ws.onopen = function() {
         addLog('Connected with server by WS in ' + (Date.now() - start) + 'ms');
+        xmlhttpLongPoll.abort();
     };
     ws.onmessage = function (e) {
         if(e.data != 'received') printMessage(JSON.parse(e.data));
     }
-}
-
-function receiveMessagesWS() {
-
 }
 
 function disconnectWS() {
@@ -177,7 +184,7 @@ sendButton.onclick = function() {
 
 function sendAJAX(data) {
     var start = Date.now();
-    xmlhttp = new XMLHttpRequest();
+    var xmlhttp = new XMLHttpRequest();
     xmlhttp.open("POST", "http://localhost:1234/put-message");
     xmlhttp.send(JSON.stringify(data));
     xmlhttp.onreadystatechange = function() {
