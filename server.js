@@ -2,12 +2,21 @@
   Chat data
 */
 
+// for websocket requests
 const messages = [];
-var clients = []; // for websocket requests
-var EventEmitter = require('events').EventEmitter; // for AJAX requests
-var messageBus = new EventEmitter();
-messageBus.setMaxListeners(100);
-var myListener = [];
+var clients = [];
+// for AJAX requests
+var EventEmitter = require('events').EventEmitter;
+var messageEvent = new EventEmitter();
+var messageListeners = [];
+var listener = function listener(message) {
+    /////////////////////////////////////////////////////////////////////////////////////////// NEW MESSAGE SENDING
+    while(messageListeners.length > 0) {
+        messageListeners[0].end(message);
+        messageListeners.splice(0, 1);
+    }
+}
+messageEvent.on('message', listener);
 
 /*
   AJAX server
@@ -32,25 +41,15 @@ var server = http.createServer(function(request, response) {
             "Content-Type": "text/plain"
         });
         response.end();
-        // var addMessageListener = function(res) {
-        //     messageBus.once('message', function(data) {
-        //         res.json(data)
-        //     })
-        // }
-        // addMessageListener(JSON.parse(data.toString()));
     } else if (path == "/get-message") {
         console.log('AJAX new messages request received');
-        var listenerNumber = myListener.length;
-        myListener[listenerNumber] = function(data) {
-            response.end(data);
-        }
-        console.log('dodawanie listenera');
-        messageBus.on('message', myListener[listenerNumber]);
-        console.log(messageBus.listeners('message'));
+        var nickname;
+        messageListeners.push(response);
+        console.log('AJAX clients: ' + messageListeners.length);
         request.on('close', function() {
-            console.log('usuwanie listenera');
-            messageBus.removeListener('message', myListener[listenerNumber]);
-            console.log(messageBus.listeners('message'));
+            var index = messageListeners.indexOf(response);
+            if (index !== -1) messageListeners.splice(index, 1);
+            console.log('AJAX clients: ' + messageListeners.length);
         });
     }
 
@@ -68,7 +67,6 @@ wsServer = new WebSocketServer({
 console.log("WEBSOCKET server initialized");
 wsServer.on('request', function(r) {
     console.log("WEBSOCKET connection started");
-    // w tym miejscu powinienem przerwać long polling ajaxa o nowe wiadomosci
     var connection = r.accept('echo-protocol', r.origin); //  connection.remoteAddress    to numer klienta podlaczonego
     var client = connection;
     clients.push(client);
@@ -98,10 +96,7 @@ function newMessage(messageObject) {
     // for WebSocket clients
     for (var i = 0; i < clients.length; i++) {
         clients[i].send(JSON.stringify(messageObject));
-        console.log('wyslano do clienta websocket nr ' + i);
     }
     // for AJAX clients
-    messageBus.emit('message', JSON.stringify(messageObject));
-    messageBus.removeAllListeners('message');
-    console.log('rozgłoszono do listenerow z messageBus');
+    messageEvent.emit('message', JSON.stringify(messageObject));
 }

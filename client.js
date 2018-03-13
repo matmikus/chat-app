@@ -126,9 +126,9 @@ var xmlhttpLongPoll;
 function receiveMessagesAJAX() {
     var longPoll = function(){
         xmlhttpLongPoll = new XMLHttpRequest();
-        xmlhttpLongPoll.open("GET", "http://localhost:1234/get-message");
-        xmlhttpLongPoll.send(null);
-        xmlhttpLongPoll.timeout = 10000;
+        xmlhttpLongPoll.open("POST", "http://localhost:1234/get-message");
+        xmlhttpLongPoll.send(document.getElementById('user-nickname').textContent);
+        // xmlhttpLongPoll.timeout = 10000;
         console.log('zaczynam czekac na nowa wiadomosc');
         xmlhttpLongPoll.onreadystatechange = function() {
             if (xmlhttpLongPoll.readyState == 4 && xmlhttpLongPoll.status == 200) {
