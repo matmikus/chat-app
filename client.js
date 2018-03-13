@@ -211,7 +211,8 @@ function sendWS(data) {
 function printMessage(messageObject) {
     var messageDiv = document.createElement('div');
     messageDiv.className = 'chat-message-own';
-    var messageHTML = '<div class="avatar"><img src="' + messageObject.avatar + '" class="chat-avatar"><span class="nickname">' + messageObject.nickname + '</span></div><div class="chat-text"><span class="arrow-left"></span><span class="chat-text">' + messageObject.message + '</span></div>';
+    if(messageObject.nickname == document.getElementById('user-nickname').textContent) var messageHTML = '<div class="avatar"><img src="' + messageObject.avatar + '" class="chat-avatar"><span class="nickname">' + messageObject.nickname + '</span></div><div class="chat-text"><span class="arrow-left"></span><span class="chat-text">' + messageObject.message + '</span></div>';
+    else var messageHTML = '<div class="chat-text"><span class="chat-text">' + messageObject.message + '</span><span class="arrow-right"></span></div><div class="avatar"><img src="' + messageObject.avatar + '" class="chat-avatar"><span class="nickname">' + messageObject.nickname + '</span></div>';
     messageDiv.innerHTML = messageHTML;
     document.getElementById('message-text').value = "";
     document.getElementById('chat-box').appendChild(messageDiv);
