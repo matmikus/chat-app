@@ -52,7 +52,7 @@ for (var i = 0; i < 12; i++) {
 function chooseAvatar(avatar) {
     for (var i = 0; i < 12; i++) document.getElementsByClassName('form-avatar')[i].style.borderColor = '#ffffff';
     avatar.style.borderColor = '#0084ff';
-    document.getElementById('user-avatar').src = avatar.src;
+    document.getElementById('user-avatar').src = avatar.getAttribute("src");
     document.getElementById('user-avatar').style.display = "none";
 }
 var loginModal = document.getElementById('login-modal');
@@ -174,7 +174,7 @@ sendButton.onclick = function() {
         document.getElementById('message-text').focus();
         var messageObject = {
             nickname: document.getElementById('user-nickname').textContent,
-            avatar: document.getElementById('user-avatar').src,
+            avatar: document.getElementById('user-avatar').getAttribute("src"),
             message: document.getElementById('message-text').value
         };
         if (document.getElementById('radioAX').checked == true) sendAJAX(messageObject);

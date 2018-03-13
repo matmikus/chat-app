@@ -10,7 +10,6 @@ var EventEmitter = require('events').EventEmitter;
 var messageEvent = new EventEmitter();
 var messageListeners = [];
 var listener = function listener(message) {
-    /////////////////////////////////////////////////////////////////////////////////////////// NEW MESSAGE SENDING
     while(messageListeners.length > 0) {
         messageListeners[0].end(message);
         messageListeners.splice(0, 1);
