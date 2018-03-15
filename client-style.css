@@ -6,7 +6,7 @@ button {
   cursor: pointer;
 }
 
-div.container {
+div.application-container {
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -14,11 +14,11 @@ div.container {
   background-color: #e6f2ff;
 }
 
-div.box {
+div.section {
   padding: 1rem;
 }
 
-div.avatar {
+div.avatar-and-nickname {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -72,7 +72,7 @@ span.arrow-right {
   border-right: 0;
 }
 
-button.stats {
+button.button-settings {
   background-color: black;
   color: white;
   padding: .5rem;
@@ -99,7 +99,7 @@ div.modal-content {
   background-color: #ffffff;
 }
 
-div.stats-modal-heading {
+div.modal-stats-heading {
   display: flex;
   justify-content: space-between;
   font-size: 200%;
@@ -107,38 +107,38 @@ div.stats-modal-heading {
   margin: 1rem;
 }
 
-div.login-modal-heading {
+div.modal-log-in-heading {
   text-align: center;
   font-size: 200%;
   font-weight: bold;
   margin: 1rem;
 }
 
-div.modal-form {
+div.modal-log-in-form {
   text-align: center;
 }
 
-div.modal-form > * {
+div.modal-log-in-form > * {
   margin: 0 1rem 1rem 1rem;
 }
 
-div.modal-input {
+div.modal-log-in-form-input {
   display: flex;
   justify-content: space-between;
 }
 
-div.modal-input > input {
+div.modal-log-in-form-input > input {
   width: 50%;
 }
 
-button.blue {
+button.button-blue {
   background-color: #0084ff;
   color: white;
   padding: .5rem;
   width: 100px;
 }
 
-img.form-avatar {
+img.modal-log-in-form-avatar {
   width: 36px;
   height: 36px;
   border: 3px solid #ffffff;
@@ -148,11 +148,8 @@ img.chat-avatar {
   width: 64px;
   height: 64px;
 }
-span.modal-close {
-  cursor: pointer;
-}
 
-div#app {
+div#application-window {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -161,15 +158,15 @@ div#app {
   font-family: tahoma, verdana, ubuntu;
 }
 
-div#container-left {
+div#application-container-left {
   width: 70%;
 }
 
-div#container-right {
+div#application-container-right {
   width: 30%;
 }
 
-div#chat-box {
+div#section-chat {
   height: 70%;
   border-style: solid;
   border-color: gray;
@@ -177,7 +174,7 @@ div#chat-box {
   overflow: auto;
 }
 
-div#message-box {
+div#section-message {
   height: 30%;
   border-style: solid;
   border-color: gray;
@@ -187,7 +184,7 @@ div#message-box {
   background-color: #bdccde;
 }
 
-div#log-box {
+div#section-log {
   height: 70%;
   border-style: solid;
   border-color: gray;
@@ -197,7 +194,7 @@ div#log-box {
   overflow: auto;
 }
 
-div#settings-box {
+div#section-settings {
   height: 30%;
   border-style: solid;
   border-color: gray;
@@ -211,7 +208,7 @@ div#settings-box {
   align-items: center;
 }
 
-div#message-writing {
+div#message-form {
   width: 400px;
   display: flex;
   flex-direction: column;
@@ -225,13 +222,17 @@ textarea#message-text {
   font-family: tahoma, verdana, ubuntu;
 }
 
-div#modal-stats {
-  margin: 1rem;
-}
-
-div#warning {
+div#modal-log-in-form-warning {
   color: red;
   display: none;
+}
+
+span#modal-stats-close {
+  cursor: pointer;
+}
+
+div#modal-stats-content {
+  margin: 1rem;
 }
 
 input[type=radio]:nth-child(1) {
@@ -245,10 +246,10 @@ input[type=radio]:nth-child(2) {
 }
 
 @media only screen and (max-width: 767px) {
-  div#container-left {
+  div#application-container-left {
     width: 100%;
   }
-  div#container-right {
+  div#application-container-right {
     display: none;
   }
 }

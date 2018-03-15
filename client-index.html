@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="client-style.css">
+  <title>CHAT-APP</title>
+</head>
+
+<body>
+
+  <div id="application-window">
+    <div id="application-container-left" class="application-container">
+
+      <div id="section-chat" class="section">
+      </div>
+
+      <div id="section-message" class="section">
+        <div class="avatar-and-nickname">
+          <img id="client-avatar">
+          <span id="client-nickname" class="nickname"></span>
+        </div>
+        <div id="message-form">
+          <textarea id="message-text" maxlength="200"></textarea><br>
+          <button id="button-send" class="button-blue" type="button">SEND</button>
+        </div>
+      </div>
+
+    </div>
+    <div id="application-container-right" class="application-container">
+
+      <div id="section-log" class="section"></div>
+
+      <div id="section-settings" class="section">
+        <form>
+          <input id="button-radio-ajax" type="radio" name="communication-type" value="ajax" checked>AJAX
+          <input id="button-radio-websocket" type="radio" name="communication-type" value="websocket">WEBSOCKET
+        </form>
+        <button id="button-clear-log" type="button" class="button-settings">CLEAR LOG</button>
+        <button id="button-show-stats" type="button" class="button-settings">SHOW STATS</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Login Modal -->
+  <div id="modal-log-in" class="modal">
+    <div class="modal-content">
+      <div class="modal-log-in-heading">CHAT-APP</div>
+      <div class="modal-log-in-form">
+        <div>Welcome to chat application</div>
+        <div class="modal-log-in-form-input">
+          <span>Your nickname</span>
+          <input id="modal-log-in-form-input-nickname" type="text" name="nickname" maxlength="10" autofocus>
+        </div>
+        <div class="modal-log-in-form-input">
+          <span>Your avatar</span>
+          <span>
+            <img src="avatars/1.png" class="modal-log-in-form-avatar">
+            <img src="avatars/2.png" class="modal-log-in-form-avatar">
+            <img src="avatars/3.png" class="modal-log-in-form-avatar">
+            <br>
+            <img src="avatars/4.png" class="modal-log-in-form-avatar">
+            <img src="avatars/5.png" class="modal-log-in-form-avatar">
+            <img src="avatars/6.png" class="modal-log-in-form-avatar">
+            <br>
+            <img src="avatars/7.png" class="modal-log-in-form-avatar">
+            <img src="avatars/8.png" class="modal-log-in-form-avatar">
+            <img src="avatars/9.png" class="modal-log-in-form-avatar">
+            <br>
+            <img src="avatars/10.png" class="modal-log-in-form-avatar">
+            <img src="avatars/11.png" class="modal-log-in-form-avatar">
+            <img src="avatars/12.png" class="modal-log-in-form-avatar">
+            <br>
+          </span>
+        </div>
+        <button id="button-log-in" class="button-blue" type="button">ENTER</button>
+        <div id="modal-log-in-form-warning">Nickname and avatar are required</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats Modal -->
+  <div id="modal-stats" class="modal">
+    <div class="modal-content">
+      <div class="modal-stats-heading">
+        <span>STATS</span>
+        <span id="modal-stats-close">&times;</span>
+      </div>
+      <div id="modal-stats-content">Stats are disabled now</div>
+    </div>
+  </div>
+
+  <script src="client-script.js"></script>
+  
+</body>
+
+</html>

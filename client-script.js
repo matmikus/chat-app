@@ -6,16 +6,16 @@ function scrollToBottom(id) {
     var div = document.getElementById(id);
     div.scrollTop = div.scrollHeight - div.clientHeight;
 }
-scrollToBottom('log-box');
-scrollToBottom('chat-box');
+scrollToBottom('section-log');
+scrollToBottom('section-chat');
 
 /*
   Showing and hiding modal with stats
 */
 
-var statsModal = document.getElementById('stats-modal');
-var statsButton = document.getElementById('show-stats');
-var statsClose = document.getElementsByClassName('modal-close')[0];
+var statsModal = document.getElementById('modal-stats');
+var statsButton = document.getElementById('button-show-stats');
+var statsClose = document.getElementById('modal-stats-close');
 statsButton.onclick = function() {
     statsModal.style.display = 'flex';
 }
@@ -32,9 +32,9 @@ window.onclick = function(event) {
   Clearing log content
 */
 
-var clearButton = document.getElementById('clear-log');
+var clearButton = document.getElementById('button-clear-log');
 clearButton.onclick = function() {
-    document.getElementById('log-box').innerHTML = "";
+    document.getElementById('section-log').innerHTML = "";
 }
 
 /*
@@ -43,28 +43,28 @@ clearButton.onclick = function() {
 
 var formAvatar = new Array();
 for (var i = 0; i < 12; i++) {
-    formAvatar.push(document.getElementsByClassName('form-avatar')[i]);
+    formAvatar.push(document.getElementsByClassName('modal-log-in-form-avatar')[i]);
     formAvatar[i].onclick = function() {
         chooseAvatar(this);
     }
 }
 
 function chooseAvatar(avatar) {
-    for (var i = 0; i < 12; i++) document.getElementsByClassName('form-avatar')[i].style.borderColor = '#ffffff';
+    for (var i = 0; i < 12; i++) document.getElementsByClassName('modal-log-in-form-avatar')[i].style.borderColor = '#ffffff';
     avatar.style.borderColor = '#0084ff';
-    document.getElementById('user-avatar').src = avatar.getAttribute("src");
-    document.getElementById('user-avatar').style.display = "none";
+    document.getElementById('client-avatar').src = avatar.getAttribute("src");
+    document.getElementById('client-avatar').style.display = "none";
 }
-var loginModal = document.getElementById('login-modal');
-var enterButton = document.getElementById('enter');
+var loginModal = document.getElementById('modal-log-in');
+var enterButton = document.getElementById('button-log-in');
 window.onload = function(event) {
     loginModal.style.display = 'flex';
 }
 enterButton.onclick = function() {
-    if (document.getElementById('user-avatar').src == "" || document.getElementById('nickname-input').value == "") document.getElementById('warning').style.display = "block";
+    if (document.getElementById('client-avatar').src == "" || document.getElementById('modal-log-in-form-input-nickname').value == "") document.getElementById('modal-log-in-form-warning').style.display = "block";
     else {
-        document.getElementById('user-nickname').innerHTML = document.getElementById('nickname-input').value;
-        document.getElementById('user-avatar').style.display = "block";
+        document.getElementById('client-nickname').innerHTML = document.getElementById('modal-log-in-form-input-nickname').value;
+        document.getElementById('client-avatar').style.display = "block";
         document.getElementById('message-text').focus();
         loginModal.style.display = 'none';
         connectAJAX();
@@ -75,13 +75,13 @@ enterButton.onclick = function() {
   Changing connection type
 */
 
-var radioAX = document.getElementById('radioAX');
+var radioAX = document.getElementById('button-radio-ajax');
 radioAX.onchange = function() {
     disconnectWS();
     connectAJAX();
 }
 
-var radioWS = document.getElementById('radioWS');
+var radioWS = document.getElementById('button-radio-websocket');
 radioWS.onchange = function() {
     connectWS();
 }
@@ -98,10 +98,10 @@ function addLog(text) {
     if (minutes < 10) minutes = '0' + minutes;
     if (seconds < 10) seconds = '0' + seconds;
     var log = document.createTextNode(hours + ':' + minutes + ':' + seconds + ' ' + text);
-    document.getElementById('log-box').appendChild(log);
+    document.getElementById('section-log').appendChild(log);
     var br = document.createElement('br');
-    document.getElementById('log-box').appendChild(br);
-    scrollToBottom('log-box');
+    document.getElementById('section-log').appendChild(br);
+    scrollToBottom('section-log');
 }
 
 /*
@@ -127,12 +127,9 @@ function receiveMessagesAJAX() {
     var longPoll = function(){
         xmlhttpLongPoll = new XMLHttpRequest();
         xmlhttpLongPoll.open("POST", "http://localhost:1234/get-message");
-        xmlhttpLongPoll.send(document.getElementById('user-nickname').textContent);
-        // xmlhttpLongPoll.timeout = 10000;
-        console.log('zaczynam czekac na nowa wiadomosc');
+        xmlhttpLongPoll.send(document.getElementById('client-nickname').textContent);
         xmlhttpLongPoll.onreadystatechange = function() {
             if (xmlhttpLongPoll.readyState == 4 && xmlhttpLongPoll.status == 200) {
-                console.log('nowa wiadomosc z czatu!!')
                 var msg = xmlhttpLongPoll.responseText;
                 printMessage(JSON.parse(msg));
                 longPoll();
@@ -168,16 +165,16 @@ function disconnectWS() {
   Sending message
 */
 
-var sendButton = document.getElementById('send');
+var sendButton = document.getElementById('button-send');
 sendButton.onclick = function() {
     if (document.getElementById('message-text').value.trim() != "") {
         document.getElementById('message-text').focus();
         var messageObject = {
-            nickname: document.getElementById('user-nickname').textContent,
-            avatar: document.getElementById('user-avatar').getAttribute("src"),
+            nickname: document.getElementById('client-nickname').textContent,
+            avatar: document.getElementById('client-avatar').getAttribute("src"),
             message: document.getElementById('message-text').value
         };
-        if (document.getElementById('radioAX').checked == true) sendAJAX(messageObject);
+        if (document.getElementById('button-radio-ajax').checked == true) sendAJAX(messageObject);
         else sendWS(messageObject);
     }
 }
@@ -211,10 +208,10 @@ function sendWS(data) {
 function printMessage(messageObject) {
     var messageDiv = document.createElement('div');
     messageDiv.className = 'chat-message-own';
-    if(messageObject.nickname == document.getElementById('user-nickname').textContent) var messageHTML = '<div class="avatar"><img src="' + messageObject.avatar + '" class="chat-avatar"><span class="nickname">' + messageObject.nickname + '</span></div><div class="chat-text"><span class="arrow-left"></span><span class="chat-text">' + messageObject.message + '</span></div>';
-    else var messageHTML = '<div class="chat-text"><span class="chat-text">' + messageObject.message + '</span><span class="arrow-right"></span></div><div class="avatar"><img src="' + messageObject.avatar + '" class="chat-avatar"><span class="nickname">' + messageObject.nickname + '</span></div>';
+    if(messageObject.nickname == document.getElementById('client-nickname').textContent) var messageHTML = '<div class="avatar-and-nickname"><img src="' + messageObject.avatar + '" class="chat-avatar"><span class="nickname">' + messageObject.nickname + '</span></div><div class="chat-text"><span class="arrow-left"></span><span class="chat-text">' + messageObject.message + '</span></div>';
+    else var messageHTML = '<div class="chat-text"><span class="chat-text">' + messageObject.message + '</span><span class="arrow-right"></span></div><div class="avatar-and-nickname"><img src="' + messageObject.avatar + '" class="chat-avatar"><span class="nickname">' + messageObject.nickname + '</span></div>';
     messageDiv.innerHTML = messageHTML;
     document.getElementById('message-text').value = "";
-    document.getElementById('chat-box').appendChild(messageDiv);
-    scrollToBottom('chat-box');
+    document.getElementById('section-chat').appendChild(messageDiv);
+    scrollToBottom('section-chat');
 }
