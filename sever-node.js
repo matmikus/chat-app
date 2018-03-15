@@ -67,19 +67,17 @@ console.log("WEBSOCKET server initialized");
 wsServer.on('request', function(r) {
     console.log("WEBSOCKET connection started");
     var connection = r.accept('echo-protocol', r.origin); //  connection.remoteAddress    to numer klienta podlaczonego
-    var client = connection;
-    clients.push(client);
+    clients.push(connection);
     console.log('WS clients: ' + clients.length);
     connection.on('message', function(message) {
         console.log("WEBSOCKET message received");
-        client.sendUTF('received');
+        connection.sendUTF('received');
         newMessage(JSON.parse(message.utf8Data));
     });
     connection.on('close', function(reasonCode, description) {
         clients.splice(clients.findIndex(function(element) {
             return connection;
         }), 1);
-        delete client;
         console.log("WEBSOCKET connection closed");
         console.log('WS clients: ' + clients.length);
     });
@@ -95,6 +93,7 @@ function newMessage(messageObject) {
     // for WebSocket clients
     for (var i = 0; i < clients.length; i++) {
         clients[i].send(JSON.stringify(messageObject));
+        console.log('=========== SENT WS MSG TO CLIENT NR ' + i);
     }
     // for AJAX clients
     messageEvent.emit('message', JSON.stringify(messageObject));

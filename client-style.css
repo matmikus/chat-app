@@ -235,6 +235,10 @@ div#modal-stats-content {
   margin: 1rem;
 }
 
+img#client-avatar {
+    display: none;
+}
+
 input[type=radio]:nth-child(1) {
   margin-left: 0;
   margin-right: 0.7rem;
