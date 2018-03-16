@@ -1,6 +1,6 @@
 var http = require('http');
 var url = require('url');
-var WebSocketServer = require('websocket').server;
+var websocket = require('websocket').server;
 var ajaxEventEmitter = require('events').EventEmitter;
 
 var websocketActiveClients = [];
@@ -46,7 +46,7 @@ var httpServer = http.createServer(function(request, response) {
 }).listen(1234);
 console.log('HTTP server for AJAX initialized');
 
-websocketServer = new WebSocketServer({
+var websocketServer = new websocket({
     httpServer: httpServer
 });
 console.log('WEBSOCKET server initialized');

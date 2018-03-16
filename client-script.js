@@ -63,8 +63,8 @@ function closeAjaxConnection() {
 }
 
 function closeWebsocketConnection() {
-    ws.onclose = function() {}; // It sends 'close' event to server
     ws.close();
+    ws.onclose = function() {}; // It sends 'close' event to server
 }
 
 function connectToServerByAjax() {
