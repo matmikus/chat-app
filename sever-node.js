@@ -5,8 +5,8 @@ var ajaxEventEmitter = require('events').EventEmitter;
 
 var websocketActiveClients = [];
 
-var ajaxMessageEvent = new ajaxEventEmitter();
 var ajaxActiveClients = [];
+var ajaxMessageEvent = new ajaxEventEmitter();
 var ajaxListener = function ajaxListener(message) {
     while(ajaxActiveClients.length > 0) {
         ajaxActiveClients[0].end(message);
