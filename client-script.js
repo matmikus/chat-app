@@ -49,20 +49,21 @@ document.getElementById('button-clear-log').onclick = function clearLogSection()
 }
 
 document.getElementById('button-radio-ajax').onchange = function chooseAjaxConnection() {
-    disconnectWebsocket();
+    closeWebsocketConnection();
     connectToServerByAjax();
 }
 
 document.getElementById('button-radio-websocket').onchange = function chooseWebsocketConnection() {
-    disconnectAjax();
+    closeAjaxConnection();
     connectToServerByWebsocket();
 }
 
-function disconnectAjax() {
+function closeAjaxConnection() {
     ajaxNewMessageLongRequest.abort();
 }
 
-function disconnectWebsocket() {
+function closeWebsocketConnection() {
+    ws.onclose = function() {}; // It sends 'close' event to server
     ws.close();
 }
 

@@ -1,100 +1,77 @@
-/*
-  Chat data
-*/
+var http = require('http');
+var url = require('url');
+var WebSocketServer = require('websocket').server;
+var ajaxEventEmitter = require('events').EventEmitter;
 
-// for websocket requests
-const messages = [];
-var clients = [];
-// for AJAX requests
-var EventEmitter = require('events').EventEmitter;
-var messageEvent = new EventEmitter();
-var messageListeners = [];
-var listener = function listener(message) {
-    while(messageListeners.length > 0) {
-        messageListeners[0].end(message);
-        messageListeners.splice(0, 1);
+var websocketActiveClients = [];
+
+var ajaxMessageEvent = new ajaxEventEmitter();
+var ajaxActiveClients = [];
+var ajaxListener = function ajaxListener(message) {
+    while(ajaxActiveClients.length > 0) {
+        ajaxActiveClients[0].end(message);
+        ajaxActiveClients.splice(0, 1);
     }
 }
-messageEvent.on('message', listener);
+ajaxMessageEvent.on('message', ajaxListener);
 
-/*
-  AJAX server
-*/
-
-var http = require('http'),
-    url = require('url');
-var server = http.createServer(function(request, response) {
+var httpServer = http.createServer(function(request, response) {
     var path = url.parse(request.url).pathname;
-    if (path == "/check-connection") {
-        console.log("AJAX connection request received");
+    if (path == '/check-connection') {
+        console.log('AJAX check connection request received');
         response.writeHead(200, {
-            "Content-Type": "text/plain"
+            'Content-Type': 'text/plain'
         });
         response.end();
-    } else if (path == "/put-message") {
-        console.log("AJAX message received");
+    } else if (path == '/put-message') {
         request.on('data', function(data) {
-            newMessage(JSON.parse(data.toString()));
+            console.log('AJAX message received:');
+            sendNewMessageToAllClients(JSON.parse(data.toString()));
         });
         response.writeHead(200, {
-            "Content-Type": "text/plain"
+            'Content-Type': 'text/plain'
         });
         response.end();
-    } else if (path == "/get-message") {
-        console.log('AJAX new messages request received');
-        var nickname;
-        messageListeners.push(response);
-        console.log('AJAX clients: ' + messageListeners.length);
+    } else if (path == '/get-message') {
+        console.log('AJAX new messages long poll request received');
+        ajaxActiveClients.push(response);
+        console.log('AJAX clients amount: ' + ajaxActiveClients.length);
         request.on('close', function() {
-            var index = messageListeners.indexOf(response);
-            if (index !== -1) messageListeners.splice(index, 1);
-            console.log('AJAX clients: ' + messageListeners.length);
+            var index = ajaxActiveClients.indexOf(response);
+            if (index !== -1) ajaxActiveClients.splice(index, 1);
+            console.log('AJAX long poll request aborted');
+            console.log('AJAX clients amount: ' + ajaxActiveClients.length);
         });
     }
-
 }).listen(1234);
-console.log("AJAX server initialized");
+console.log('HTTP server for AJAX initialized');
 
-/*
-  WebSocket server
-*/
-
-var WebSocketServer = require('websocket').server;
-wsServer = new WebSocketServer({
-    httpServer: server
+websocketServer = new WebSocketServer({
+    httpServer: httpServer
 });
-console.log("WEBSOCKET server initialized");
-wsServer.on('request', function(r) {
-    console.log("WEBSOCKET connection started");
-    var connection = r.accept('echo-protocol', r.origin); //  connection.remoteAddress    to numer klienta podlaczonego
-    clients.push(connection);
-    console.log('WS clients: ' + clients.length);
+console.log('WEBSOCKET server initialized');
+websocketServer.on('request', function(r) {
+    console.log('WEBSOCKET new connection started');
+    var connection = r.accept('echo-protocol', r.origin);
+    websocketActiveClients.push(connection);
+    console.log('WEBSOCKET clients amount: ' + websocketActiveClients.length);
     connection.on('message', function(message) {
-        console.log("WEBSOCKET message received");
+        console.log('WEBSOCKET message received:');
         connection.sendUTF('received');
-        newMessage(JSON.parse(message.utf8Data));
+        sendNewMessageToAllClients(JSON.parse(message.utf8Data));
     });
     connection.on('close', function(reasonCode, description) {
-        clients.splice(clients.findIndex(function(element) {
-            return connection;
+        websocketActiveClients.splice(websocketActiveClients.findIndex(function(element) {
+            if(element == connection) return true;
+            else return false;
         }), 1);
-        console.log("WEBSOCKET connection closed");
-        console.log('WS clients: ' + clients.length);
+        console.log('WEBSOCKET connection closed');
+        console.log('WEBSOCKET clients amount: ' + websocketActiveClients.length);
     });
 });
 
-/*
-  Adding new message and sending it to all listeners
-*/
-
-function newMessage(messageObject) {
-    messages.push(messageObject);
+function sendNewMessageToAllClients(messageObject) {
     console.log(messageObject);
-    // for WebSocket clients
-    for (var i = 0; i < clients.length; i++) {
-        clients[i].send(JSON.stringify(messageObject));
-        console.log('=========== SENT WS MSG TO CLIENT NR ' + i);
-    }
-    // for AJAX clients
-    messageEvent.emit('message', JSON.stringify(messageObject));
+    for (var i = 0; i < websocketActiveClients.length; i++) websocketActiveClients[i].send(JSON.stringify(messageObject));
+    ajaxMessageEvent.emit('message', JSON.stringify(messageObject));
 }
