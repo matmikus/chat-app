@@ -26,7 +26,10 @@ var httpServer = http.createServer(function(request, response) {
     } else if (path == '/put-message') {
         request.on('data', function(data) {
             console.log('AJAX message received:');
-            sendNewMessageToAllClients(JSON.parse(data.toString()));
+            var receivedByServerTime = Date.now();
+            var msg = JSON.parse(data.toString());
+            msg.receivedByServer = receivedByServerTime;
+            sendNewMessageToAllClients(msg);
         });
         response.writeHead(200, {
             'Content-Type': 'text/plain'
@@ -56,9 +59,12 @@ websocketServer.on('request', function(r) {
     websocketActiveClients.push(connection);
     console.log('WEBSOCKET clients amount: ' + websocketActiveClients.length);
     connection.on('message', function(message) {
+        var receivedByServerTime = Date.now();
+        var msg = JSON.parse(message.utf8Data);
+        msg.receivedByServer = receivedByServerTime;
         console.log('WEBSOCKET message received:');
         connection.sendUTF('received');
-        sendNewMessageToAllClients(JSON.parse(message.utf8Data));
+        sendNewMessageToAllClients(msg);
     });
     connection.on('close', function(reasonCode, description) {
         websocketActiveClients.splice(websocketActiveClients.findIndex(function(element) {
@@ -72,6 +78,10 @@ websocketServer.on('request', function(r) {
 
 function sendNewMessageToAllClients(messageObject) {
     console.log(messageObject);
+
+    messageObject.sentByServer = Date.now();
     for (var i = 0; i < websocketActiveClients.length; i++) websocketActiveClients[i].send(JSON.stringify(messageObject));
+
+    messageObject.sentByServer = Date.now();
     ajaxMessageEvent.emit('message', JSON.stringify(messageObject));
 }

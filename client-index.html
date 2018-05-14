@@ -7,7 +7,7 @@
   <title>CHAT-APP</title>
 </head>
 
-<body>
+<body id="xyz">   <!-- id do wywalenia -->
 
   <div id="application-window">
     <div id="application-container-left" class="application-container">
@@ -21,7 +21,7 @@
           <span id="client-nickname" class="nickname"></span>
         </div>
         <div id="message-form">
-          <textarea id="message-text" maxlength="200"></textarea><br>
+          <textarea id="message-text" maxlength="20000"></textarea><br>
           <button id="button-send" class="button-blue" type="button">SEND</button>
         </div>
       </div>
@@ -87,12 +87,12 @@
         <span>STATS</span>
         <span id="modal-stats-close">&times;</span>
       </div>
-      <div id="modal-stats-content">Stats are disabled now</div>
+      <div id="modal-stats-content">There is no statistic to show</div>
     </div>
   </div>
 
   <script src="client-script.js"></script>
-  
+
 </body>
 
 </html>

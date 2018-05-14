@@ -31,6 +31,7 @@ function setClientAvatar(avatar) {
 }
 
 document.getElementById('button-show-stats').onclick = function showStatsInModal() {
+    loadStatsToModal();
     document.getElementById('modal-stats').style.display = 'flex';
 }
 
@@ -76,20 +77,41 @@ function connectToServerByAjax() {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             var time = Date.now();
             addTextToLogSection('Connected with server by AJAX in ' + (time - startTime) + 'ms');
+            addStats('connectionAJAX',(time - startTime));
             waitForMessageByAjax();
         }
     }
 }
 
 function connectToServerByWebsocket() {
-    var start = Date.now();
+    var startTime = Date.now();
     ws = new WebSocket('ws://localhost:1234', 'echo-protocol');
     ws.addEventListener('open', function(event) {
-        addTextToLogSection('Connected with server by WS in ' + (Date.now() - start) + 'ms');
-
+        var time = Date.now();
+        addTextToLogSection('Connected with server by WS in ' + (time - startTime) + 'ms');
+        addStats('connectionWebsocket',(time - startTime));
     });
     ws.addEventListener('message', function(e) {
-        if (e.data != 'received') printMessageInChatSection(JSON.parse(e.data));
+        if (e.data != 'received') {
+            var receivedByClientTime = Date.now();
+            var msg = JSON.parse(e.data);
+            msg.receivedByClient = receivedByClientTime;
+
+            addTextToLogSection('Upload + download: ' + (msg.receivedByClient - msg.sentByClient));
+            addTextToLogSection('Upload: ' + (msg.receivedByServer - msg.sentByClient));
+            addTextToLogSection('Download: ' + (msg.receivedByClient - msg.sentByServer));
+            addStats('messageWebsocket', msg.receivedByClient - msg.sentByClient, msg.receivedByServer - msg.sentByClient, msg.receivedByClient - msg.sentByServer);
+
+            ////// !!!!!!!!!!!!!!
+            addStats2(msg.sentByClient, msg.receivedByServer, msg.sentByServer, msg.receivedByClient)/////// TEMPORARY!!!!! /////////////////////////////////////////
+
+            // console.log(msg.sentByClient);
+            // console.log(msg.receivedByServer);
+            // console.log(msg.sentByServer);
+            // console.log(msg.receivedByClient);
+
+            printMessageInChatSection(msg);
+        }
     });
 }
 
@@ -119,8 +141,19 @@ function waitForMessageByAjax() {
         ajaxNewMessageLongRequest.send();
         ajaxNewMessageLongRequest.onreadystatechange = function() {
             if (ajaxNewMessageLongRequest.readyState == 4 && ajaxNewMessageLongRequest.status == 200) {
-                var msg = ajaxNewMessageLongRequest.responseText;
-                printMessageInChatSection(JSON.parse(msg));
+                var receivedByClientTime = Date.now();
+                var msg = JSON.parse(ajaxNewMessageLongRequest.responseText);
+                msg.receivedByClient = receivedByClientTime;
+
+                addTextToLogSection('Upload + download: ' + (msg.receivedByClient - msg.sentByClient));
+                addTextToLogSection('Upload: ' + (msg.receivedByServer - msg.sentByClient));
+                addTextToLogSection('Download: ' + (msg.receivedByClient - msg.sentByServer));
+                addStats('messageAJAX', msg.receivedByClient - msg.sentByClient, msg.receivedByServer - msg.sentByClient, msg.receivedByClient - msg.sentByServer);
+
+                ////// !!!!!!!!!!!!!!
+                addStats2(msg.sentByClient, msg.receivedByServer, msg.sentByServer, msg.receivedByClient)/////// TEMPORARY!!!!! /////////////////////////////////////////
+
+                printMessageInChatSection(msg);
                 sendAjaxRequest();
             }
         }
@@ -148,7 +181,11 @@ document.getElementById('button-send').onclick = function prepareMessageAndSend(
         var messageObject = {
             nickname: document.getElementById('client-nickname').textContent,
             avatar: document.getElementById('client-avatar').getAttribute("src"),
-            message: document.getElementById('message-text').value
+            message: document.getElementById('message-text').value,
+            sentByClient: null,
+            receivedByServer: null,
+            sentByServer: null,
+            receivedByClient: null
         };
         if (document.getElementById('button-radio-ajax').checked == true) sendMessageByAjax(messageObject);
         else sendMessageByWebsocket(messageObject);
@@ -159,20 +196,66 @@ function sendMessageByAjax(data) {
     var start = Date.now();
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.open("POST", "http://localhost:1234/put-message");
+    data.sentByClient = Date.now();
     xmlhttp.send(JSON.stringify(data));
     xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            addTextToLogSection('Successfully sent message to server by AJAX in ' + (Date.now() - start) + 'ms');
+            addTextToLogSection('Successfully sent message to server by AJAX');
         }
     }
 }
 
 function sendMessageByWebsocket(data) {
-    var start = Date.now();
+    data.sentByClient = Date.now();
     ws.send(JSON.stringify(data));
     var handler = function(e) {
-        if (e.data == 'received') addTextToLogSection('Successfully sent message to server by WEBSOCKET in ' + (Date.now() - start) + 'ms');
+        if (e.data == 'received') addTextToLogSection('Successfully sent message to server by WEBSOCKET');
         ws.removeEventListener("message", handler);
     };
     ws.addEventListener("message", handler);
+}
+
+var statsConnectionsAJAX = [];
+var statsConnectionsWebsocket = [];
+var statsMessagesAJAX = [];
+var statsMessagesWebsocket = [];
+
+function addStats(type, totalTime, uploadTime = null, downloadTime = null) {
+    switch(type){
+        case 'connectionAJAX':
+            statsConnectionsAJAX.push({totalTime: totalTime});
+            break;
+        case 'connectionWebsocket':
+            statsConnectionsWebsocket.push({totalTime: totalTime});
+            break;
+        case 'messageAJAX':
+            statsMessagesAJAX.push({totalTime: totalTime, uploadTime: uploadTime, downloadTime: downloadTime});
+            break;
+        case 'messageWebsocket':
+            statsMessagesWebsocket.push({totalTime: totalTime, uploadTime: uploadTime, downloadTime: downloadTime});
+            break;
+    }
+}
+
+////// !!!!!!!!!!!!!!
+//////////////////// TEMPORARY!!!!!!! ////////////////////////////////////
+var stats1 = [], stats2 = [], stats3 = [], stats4 = []
+function addStats2(p1, p2, p3, p4) {
+    stats1.push(p1)
+    stats2.push(p2)
+    stats3.push(p3)
+    stats4.push(p4)
+}
+document.getElementById('button-show-stats').onclick = function showStatsInModal() {
+    var content = JSON.stringify(stats1) + '<br><br><br>' + JSON.stringify(stats2) + '<br><br><br>' + JSON.stringify(stats3) + '<br><br><br>' + JSON.stringify(stats4);
+    document.getElementById('xyz').innerHTML = content;
+}
+///////////////////////////////////////////////////////////////////////////
+
+function loadStatsToModal() {
+    var statsContent = 'STATS CONNECTIONS AJAX:<br><br>' + JSON.stringify(statsConnectionsAJAX)
+    + '<br><br>STATS CONNECTIONS WEBSOCKET:<br><br>' + JSON.stringify(statsConnectionsWebsocket)
+    + '<br><br>STATS MESSAGES AJAX:<br><br>' + JSON.stringify(statsMessagesAJAX)
+    + '<br><br>STATS MESSAGES WEBSOCKET:<br><br>' + JSON.stringify(statsMessagesWebsocket);
+    document.getElementById('modal-stats-content').innerHTML = statsContent;
 }
